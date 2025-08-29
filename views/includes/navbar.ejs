@@ -1,0 +1,112 @@
+<style>
+  /* Dark Mode Gradient Navbar */
+  .navbar-custom {
+    background: linear-gradient(90deg, #1f4037, #99f2c8);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .navbar-custom .navbar-brand {
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 1.2px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
+
+  .navbar-custom .navbar-brand i {
+    color: #d4efdf;
+    font-size: 1.6rem;
+    transition: transform 0.3s ease;
+  }
+  .navbar-custom .navbar-brand:hover i {
+    transform: rotate(20deg);
+    color: #a3d9b1;
+  }
+
+  .navbar-custom .nav-link {
+    color: #d4efdf !important;
+    font-weight: 600;
+    margin: 0 15px;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-custom .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #a3d9b1;
+    transition: width 0.3s ease;
+  }
+
+  .navbar-custom .nav-link:hover,
+  .navbar-custom .nav-link.active {
+    color: #a3d9b1 !important;
+  }
+
+  .navbar-custom .nav-link:hover::after,
+  .navbar-custom .nav-link.active::after {
+    width: 100%;
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23d4efdf' stroke-width='3' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<nav class="navbar navbar-expand-lg navbar-custom mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <i class="fas fa-compass"></i> Wanderlust
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse mt-2 mt-lg-0" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">All Listings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">Add New Listing</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <% if (!currentUser) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/register">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/login">Sign In</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">Hi, <%= currentUser.username %></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/logout">Logout</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,14 @@
+body{
+    background-color: pink;
+}
+.fixed-img {
+    height: 200px; /* Set a fixed height */
+    object-fit: cover; /* Ensures images maintain aspect ratio and fill the box without distortion */
+    width: 100%; /* Makes the width flexible based on the container */
+    transition: opacity 0.3s ease; /* Smooth transition for opacity change */
+  }
+  
+  .fixed-img:hover {
+    opacity: 0.8; /* Low opacity when hovered */
+  }
+  

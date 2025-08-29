@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= listing.title %> - Wanderlust</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .listing-card img {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        height: 100%;
+        object-fit: cover;
+      }
+      .listing-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/listings">Wanderlust</a>
+        <div>
+          <% if (!currentUser) { %>
+          <a href="/user/login" class="btn btn-outline-light me-2">Login</a>
+          <a href="/user/register" class="btn btn-outline-light">Register</a>
+          <% } else { %>
+          <span class="text-light me-2">Welcome, <%= currentUser.username %>!</span>
+          <a href="/listings/new" class="btn btn-outline-light me-2">New Listing</a>
+          <a href="/user/logout" class="btn btn-outline-light">Logout</a>
+          <% } %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-5">
+      <% if (success && success.length > 0) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
+
+      <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
+
+      <div class="card listing-card mb-4">
+        <div class="row g-0">
+          <div class="col-md-6">
+            <img
+              src="<%= listing.image.url || 'https://source.unsplash.com/600x400/?travel' %>"
+              alt="<%= listing.title %>"
+              class="img-fluid h-100 w-100"
+            />
+          </div>
+          <div class="col-md-6">
+            <div class="card-body p-4">
+              <h2 class="card-title mb-3"><%= listing.title %></h2>
+              <p class="mb-2"><strong>Price:</strong> ₹<%= listing.price %></p>
+              <p class="mb-2">
+                <strong>Location:</strong> <%= listing.location %>, <%= listing.country %>
+              </p>
+              <p class="mb-3"><strong>Description:</strong><br /><%= listing.description %></p>
+              <p><strong>Posted by:</strong> <%= listing.author ? listing.author.username : 'Unknown' %></p>
+
+              <% if (
+                currentUser &&
+                listing.author &&
+                listing.author._id &&
+                currentUser._id.toString() === listing.author._id.toString()
+              ) { %>
+              <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning me-2">Edit</a>
+              <form
+                action="/listings/<%= listing._id %>?_method=DELETE"
+                method="POST"
+                class="d-inline"
+              >
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Reviews</h3>
+      <% if (listing.reviews.length === 0) { %>
+      <p>No reviews yet.</p>
+      <% } else { %>
+      <ul class="list-group mb-4">
+        <% listing.reviews.forEach(review => { %>
+        <li class="list-group-item">
+          <strong><%= review.author ? review.author.username : 'Unknown' %></strong>:
+          <%= review.content %>
+
+          <% if (
+            currentUser &&
+            review.author && review.author._id &&
+            (review.author._id.toString() === currentUser._id.toString() ||
+             listing.author._id.toString() === currentUser._id.toString())
+          ) { %>
+          <form
+            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+            method="POST"
+            class="d-inline float-end"
+          >
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+          <% } %>
+        </li>
+        <% }); %>
+      </ul>
+      <% } %>
+
+      <% if (currentUser) { %>
+      <h4>Add a Review</h4>
+      <form action="/listings/<%= listing._id %>/reviews" method="POST">
+        <div class="mb-3">
+          <textarea
+            name="review[content]"
+            class="form-control"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+      <% } else { %>
+      <p><a href="/user/login">Log in</a> to write a review.</p>
+      <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
